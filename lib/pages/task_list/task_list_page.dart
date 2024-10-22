@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import 'package:todo_app/providers/task_provider%20copy.dart';
 
 class TaskListPage extends StatefulWidget {
-  const TaskListPage({super.key});
+  final String groupId;
+  const TaskListPage({super.key, required this.groupId});
 
   @override
   State<TaskListPage> createState() => _TaskListPageState();
@@ -10,6 +14,8 @@ class TaskListPage extends StatefulWidget {
 class _TaskListPageState extends State<TaskListPage> {
   @override
   void initState() {
+    final taskProvider = context.read<TaskProvider>();
+    taskProvider.listTasksByGroup(widget.groupId);
     super.initState();
   }
 
@@ -24,8 +30,20 @@ class _TaskListPageState extends State<TaskListPage> {
           ),
         ],
       ),
-      body: Center(
-        child: Text('Task List'),
+      body: Consumer<TaskProvider>(
+        builder: (context, provider, _) {
+          if(provider.isLoading) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          return ListView.builder(
+            itemCount: provider.tasks.length,
+            itemBuilder: (context, index) {
+              return ListTile(title: Text(provider.tasks[index].title),);
+            },
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
