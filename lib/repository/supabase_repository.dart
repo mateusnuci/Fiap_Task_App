@@ -35,6 +35,14 @@ class SupabaseRepository {
 
     return taskGroupsWithCounts;
   }
+
+  Future<void> updateTask(Task task) async {
+    final supabase = Supabase.instance.client;
+    await supabase
+        .from('tasks')
+        .update({'is_completed': task.isCompleted})
+        .eq('id', task.id);
+  }
   
 
   Future<List<Task>> listTasksByGroup(String groupId) async {

@@ -17,18 +17,21 @@ class TaskWidget extends StatefulWidget {
 class _TaskWidgetState extends State<TaskWidget> {
   @override
   Widget build(BuildContext context) {
-    // final provider = Provider.of<TaskProvider>(context); 
+    final provider = Provider.of<TaskProvider>(context, listen: false); 
     return ListTile(
       onTap: () {
         
       },
       leading: GestureDetector(
         onTap: () {
-          setState(() {
+          provider.completeTask(widget.task);
+          
+          /*setState(() {
             widget.task.isCompleted = widget.task.isCompleted ? false : true;
             
         });
-        }, // AQUI
+        */
+        }, 
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 600),
           decoration: BoxDecoration(

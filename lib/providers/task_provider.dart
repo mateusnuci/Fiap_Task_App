@@ -11,6 +11,12 @@ class TaskProvider with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
+  double get taskCompletionProgress {
+    if (_tasks.isEmpty) return 0;
+    final completedTasks = _tasks.where((task) => task.isCompleted).length;
+    return completedTasks / _tasks.length;
+  }
+
   Future<void> listTasksByGroup(String groupId) async {
     _isLoading = true;
     notifyListeners();
@@ -24,16 +30,16 @@ class TaskProvider with ChangeNotifier {
     }
   }
 
+ 
   Future<void> completeTask(Task task) async {
-     try {
-      await _repo.
-      _tasks.removeWhere((task) => task.id == taskId);
+    try {
+      task.isCompleted = !task.isCompleted;
+      await _repo.updateTask(task);
       notifyListeners();
     } catch (e) {
-      print(e);
+      print("Erro ao atualizar tarefa: $e");
     }
   }
-
   Future<void> createTask(Task task) async {
     try {
       await _repo.createTask(task);

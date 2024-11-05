@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/providers/task_provider.dart';
 
 class TasksSummaryWidget extends StatelessWidget {
   const TasksSummaryWidget({
@@ -7,25 +9,29 @@ class TasksSummaryWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final taskProvider = context.watch<TaskProvider>();
+    final taskProgress = taskProvider.taskCompletionProgress;
+    final totalTasks = taskProvider.tasks.length;
+    final completedTasks = taskProvider.tasks.where((task) => task.isCompleted).length;
+
     return SizedBox(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(
+          SizedBox(
             width: 35,
             height: 35,
             child: CircularProgressIndicator(
               strokeWidth: 5,
-              valueColor: AlwaysStoppedAnimation(Colors.red),
+              valueColor: const AlwaysStoppedAnimation(Colors.red),
               backgroundColor: Colors.grey,
-              value: 0.5,
+              value: taskProgress, // Atualiza com o valor do Provider
             ),
           ),
           const SizedBox(
             width: 20,
           ),
-
-          /// Texts
+          /// Textos
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -40,7 +46,7 @@ class TasksSummaryWidget extends StatelessWidget {
                   height: 3,
                 ),
                 Text(
-                  "1 of 3 task",
+                  "$completedTasks of $totalTasks task(s)", // Exibe o progresso de tarefas
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ],
