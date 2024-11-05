@@ -35,6 +35,7 @@ class SupabaseRepository {
 
     return taskGroupsWithCounts;
   }
+  
 
   Future<List<Task>> listTasksByGroup(String groupId) async {
     final supabase = Supabase.instance.client;

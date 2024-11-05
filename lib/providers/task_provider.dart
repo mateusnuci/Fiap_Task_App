@@ -24,6 +24,16 @@ class TaskProvider with ChangeNotifier {
     }
   }
 
+  Future<void> completeTask(Task task) async {
+     try {
+      await _repo.
+      _tasks.removeWhere((task) => task.id == taskId);
+      notifyListeners();
+    } catch (e) {
+      print(e);
+    }
+  }
+
   Future<void> createTask(Task task) async {
     try {
       await _repo.createTask(task);

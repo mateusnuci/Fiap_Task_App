@@ -6,7 +6,7 @@ class Task {
   final String title;
   final String subtitle;
   final DateTime date;
-  final bool isCompleted;
+  bool isCompleted;
   final String groupId;
 
   Task({
